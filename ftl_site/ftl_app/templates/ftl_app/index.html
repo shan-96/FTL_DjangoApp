@@ -5,14 +5,29 @@
     <title>Welcome</title>
 </head>
 <body>
-{% if user_list %}
+<h1>Get User Activity Detail</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<div>
+    <h4>Enter User ID [Multiple user IDs can be comma separated]</h4>
+    <form action="{% url 'ftl_app:results' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="user_id_list" id="user_id">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+
+<!--{% if user_list %}
     <ul>
     {% for user in user_list %}
-        <li><a href="results/">{{ user.real_name }}</a></li>
+        <li><a href="{% url 'ftl_app:results' %}">{{ user.real_name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No users are available.</p>
-{% endif %}
+{% endif %}-->
 </body>
 </html>

@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path('ftl_app/', include('ftl_app.urls')),
+    path('ftl_app/', include(('ftl_app.urls', 'ftl_app'), namespace='ftl_app')),
     path('admin/', admin.site.urls),
 ]
