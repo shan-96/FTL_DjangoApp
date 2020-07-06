@@ -24,6 +24,7 @@ class FTL_User_Activity(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        obj = "User_Activity\nid = " + str(self.user_id) + " start_time = " + str(self.start_time) + " end_time = " + str(
+        obj = "User_Activity\nid = " + str(self.user_id) + " start_time = " + str(
+            self.start_time) + " end_time = " + str(
             self.end_time)
         return obj
