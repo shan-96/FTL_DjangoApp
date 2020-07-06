@@ -1,12 +1,15 @@
-from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import loader
 from .models import FTL_User
 
 
 def index(request):
     users = FTL_User.objects.order_by('real_name')
-    output = ", ".join([u.real_name for u in users])
-    return HttpResponse(output)
+    template = loader.get_template('ftl_app/index.html')
+    context = {
+        'user_list': users,
+    }
+    return HttpResponse(template.render(context, request))
 
 
 def results(request):
