@@ -15,9 +15,9 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
-def get_error_json():
+def get_error_json(err_msg):
     error = JsonOutput()
-    error.set_error_msg("BAD API REQUEST")
+    error.set_error_msg(err_msg)
     return json.dumps(error.__dict__, default=lambda o: o.__dict__, indent=2)
 
 
@@ -43,10 +43,11 @@ def results(request):
     template = loader.get_template('ftl_app/results.html')
     user_id_list = request.POST['user_id_list'].replace(" ", "")
     if user_id_list is None or user_id_list == "":
-        return render(request, 'ftl_app/results.html', {
-            'error_message': "No user ID specified",
-            'results': get_error_json(),
-        })
+        response_json = get_error_json("No user id specified. Bad request")
+        context = {
+            'results': response_json,
+        }
+        return HttpResponse(template.render(context, request), status=400)
 
     user_id_list = user_id_list.split(',')
 
