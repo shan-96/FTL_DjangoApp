@@ -3,17 +3,14 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
+from datetime import datetime
 
-from .models import FTL_User
+from .models import FTL_User, FTL_User_Activity
 
 
 def index(request):
-    users = FTL_User.objects.order_by('real_name')
     template = loader.get_template('ftl_app/index.html')
-    context = {
-        'user_list': users,
-    }
-    return HttpResponse(template.render(context, request))
+    return HttpResponse(template.render(request))
 
 
 def get_error_json():
@@ -23,18 +20,22 @@ def get_error_json():
 
 
 def get_user_activity(user_id_list):
-    # TODO: implement this !!
     output = JsonOutput()
-    for user in user_id_list:
-        record = ActivityRecord(user, "FULL_NAME_{}".format(user), "TZ")
+    users = FTL_User.objects.filter(user_id__in=user_id_list)
+    for u in users:
+        user_activities = FTL_User_Activity.objects.filter(user_id=u.user_id)
+        record = ActivityRecord(u.user_id, u.real_name, u.tz)
+        for a in user_activities:
+            start = a.start_time.strftime("%b %d %Y  %I:%M %p")
+            end = a.end_time.strftime("%b %d %Y  %I:%M %p")
+            record.activity_periods.append(ActivityPeriod(start, end))
         output.add_member(record)
-
     return json.dumps(output.__dict__, default=lambda o: o.__dict__, indent=2)
 
 
 def results(request):
     template = loader.get_template('ftl_app/results.html')
-    user_id_list = request.POST['user_id_list']
+    user_id_list = request.POST['user_id_list'].replace(" ", "")
     if user_id_list is None or user_id_list == "":
         return render(request, 'ftl_app/results.html', {
             'error_message': "No user ID specified",
@@ -82,3 +83,12 @@ class ActivityRecord:
 
     def add_period(self, activity):
         self.activity_periods.append(activity)
+
+
+class ActivityPeriod:
+    start_time = ""
+    end_time = ""
+
+    def __init__(self, start_time, end_time):
+        self.start_time = start_time
+        self.end_time = end_time
