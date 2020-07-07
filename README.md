@@ -4,7 +4,7 @@
 3. ftl_site contains django ftl_app, templates view and models
 4. App retrieves data from sqlite3 DB (ftl_db.sqlite3)
 5. API endpoint contract as below
-   > GET / USERID \
+   > POST / USERID \
    >  `input = (multiple) user ID of user` \
    > `output = activity data of user(s) in json`
    
