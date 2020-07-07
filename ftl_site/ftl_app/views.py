@@ -1,11 +1,10 @@
 import json
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
-from django.urls import reverse
 
-from .models import FTL_User, FTL_User_Activity
+from .models import FTL_User
 
 
 def index(request):
@@ -27,9 +26,7 @@ def get_user_activity(user_id_list):
     # TODO: implement this !!
     output = JsonOutput()
     for user in user_id_list:
-        record = ActivityRecord(user)
-        record.tz = "TZ"
-        record.real_name = "FULL_NAME_{}".format(user)
+        record = ActivityRecord(user, "FULL_NAME_{}".format(user), "TZ")
         output.add_member(record)
 
     return json.dumps(output.__dict__, default=lambda o: o.__dict__, indent=2)
