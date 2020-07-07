@@ -3,7 +3,6 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
-from django.templatetags.static import static
 
 from .models import FTL_User, FTL_User_Activity
 
@@ -35,6 +34,8 @@ def get_user_activity(user_id_list):
             end = a.end_time.strftime("%b %d %Y  %I:%M %p")
             record.activity_periods.append(ActivityPeriod(start, end))
         output.add_member(record)
+
+    # now we have the object. convert it to json
     return json.dumps(output.__dict__, default=lambda o: o.__dict__, indent=2)
 
 
