@@ -3,14 +3,17 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader
-from datetime import datetime
+from django.templatetags.static import static
 
 from .models import FTL_User, FTL_User_Activity
 
 
 def index(request):
     template = loader.get_template('ftl_app/index.html')
-    return HttpResponse(template.render(request))
+    context = {
+        'title': "FTL APP",
+    }
+    return HttpResponse(template.render(context, request))
 
 
 def get_error_json():
@@ -21,6 +24,8 @@ def get_error_json():
 
 def get_user_activity(user_id_list):
     output = JsonOutput()
+    # We could use .select_related() with filter as a JOIN but that makes the for loop complex
+    # as the data requested in JSON is not flat
     users = FTL_User.objects.filter(user_id__in=user_id_list)
     for u in users:
         user_activities = FTL_User_Activity.objects.filter(user_id=u.user_id)

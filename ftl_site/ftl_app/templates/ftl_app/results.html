@@ -9,28 +9,39 @@
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-<body>
+<body onload=download()>
 <div class="container">
     <h4 class="header center orange-text">Your JSON Output</h4>
     <div class="container">
-    <pre>
+    <pre id="pre">
 {{ results }}
     </pre>
         <div class="row">
-            <div>
-                <a href="{% url 'ftl_app:index' %}" class="btn-large waves-effect waves-light orange">Go
-                    Back
-                    <i class="material-icons right">arrow_back</i>
+            <div class="col s2 offset-s2">
+                <a href="{% url 'ftl_app:index' %}" class="btn-large waves-effect waves-light orange">
+                    <i class="material-icons">arrow_back</i>
                 </a>
             </div>
-            <br>
-            <div>
-                <a class="btn-floating btn-large waves-effect waves-light red"><i
+            <div class="col s2 offset-s4">
+                <a href="#" id="dwl"
+                   class="btn-floating btn-large waves-effect waves-light red"><i
                         class="material-icons">file_download</i></a>
             </div>
         </div>
     </div>
 </div>
+<script>
+function download() {
+  var str = document.getElementById("pre").innerHTML
+  if(str.length <= 1000){
+    var enc = "data:application/octet-stream;charset=utf-8;base64," + window.btoa(str);
+    document.getElementById("dwl").href = enc;
+  } else {
+    alert("Data too large. Will be only available for view. Not for download")
+  }
+}
+
+</script>
 <script type="text/javascript" src="{% static 'ftl_app/js/materialize.min.js' %}"></script>
 </body>
 </html>

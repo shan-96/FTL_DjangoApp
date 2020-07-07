@@ -1,7 +1,9 @@
+import datetime
+
 from django.test import TestCase
 from django.utils import timezone
+
 from .models import FTL_User_Activity
-import datetime
 
 
 class UserActivityTests(TestCase):
