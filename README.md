@@ -15,5 +15,5 @@
 
 ### Usage
 1. Configure port, IP and url in `Settings.py`
-2. open terminal / cmd and execute `setup.cmd` or `setup.sh` depending on OS
-3. Execute through `run.cmd` or `run.sh` depending on OS
+2. open terminal / cmd and execute `setup/setup.cmd` or `setup/setup.sh` depending on OS
+3. Execute through `run/run.cmd` or `run/run.sh` depending on OS
