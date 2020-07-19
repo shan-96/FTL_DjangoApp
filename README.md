@@ -16,3 +16,4 @@
 ### Usage
 1. Configure port, IP and url in `Settings.py`
 2. Execute through `run.bat` or `run.sh` depending on OS
+3. Test the app using `test.py`
