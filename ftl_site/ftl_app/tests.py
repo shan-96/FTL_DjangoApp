@@ -23,48 +23,19 @@ class UserActivityTests(TestCase):
 
 class ResultsViewTest(TestCase):
     def setUp(self):
-        json_str = ''''{
-	"ok": true,
-	"members": [{
-			"id": "W012A3CDE",
-			"real_name": "Egon Spengler",
-			"tz": "America/Los_Angeles",
-			"activity_periods": [{
-					"start_time": "Feb 1 2020  1:33PM",
-					"end_time": "Feb 1 2020 1:54PM"
-				},
-				{
-					"start_time": "Mar 1 2020  11:11AM",
-					"end_time": "Mar 1 2020 2:00PM"
-				},
-				{
-					"start_time": "Mar 16 2020  5:33PM",
-					"end_time": "Mar 16 2020 8:02PM"
-				}
-			]
-		},
-		{
-			"id": "W07QCRPA4",
-			"real_name": "Glinda Southgood",
-			"tz": "Asia/Kolkata",
-			"activity_periods": [{
-					"start_time": "Feb 1 2020  1:33PM",
-					"end_time": "Feb 1 2020 1:54PM"
-				},
-				{
-					"start_time": "Mar 1 2020  11:11AM",
-					"end_time": "Mar 1 2020 2:00PM"
-				},
-				{
-					"start_time": "Mar 16 2020  5:33PM",
-					"end_time": "Mar 16 2020 8:02PM"
-				}
-			]
-		}
-	]
-}'''
-        self.input_data = json.loads(json_str)
-        FTL_User.save(**self.input_data)
+        input_data = {
+            'user_id': 'ae2945df',
+            'real_name': 'John Wick',
+            'tz': 'Asia/Kolkata'}
+        ftl_user = FTL_User(user_id=input_data['user_id'], real_name=input_data['real_name'], tz=input_data['tz'])
+        FTL_User.save(ftl_user)
+        input_data = {
+            'user_id': 'ae2945df',
+            'start_time': '2020-02-01 13:33',
+            'end_time': '2020-02-01 13:54'}
+        ftl_user_activity = FTL_User_Activity(user_id=ftl_user, start_time=input_data['start_time'],
+                                              end_time=input_data['end_time'])
+        FTL_User_Activity.save(ftl_user_activity)
 
     def test_empty_string(self):
         c = Client()
@@ -82,4 +53,12 @@ class ResultsViewTest(TestCase):
         result = json.loads(response.context['results'])
         self.assertEqual(True, result['ok'])
         self.assertEqual(0, len(result['members']))
+        self.assertEqual('', result['error_msg'])
+
+    def test_request_output(self):
+        c = Client()
+        response = c.post(path='/ftl_app/results/', data={'user_id_list': 'ae2945df'}, follow=True)
+        result = json.loads(response.context['results'])
+        self.assertEqual(True, result['ok'])
+        self.assertEqual(1, len(result['members']))
         self.assertEqual('', result['error_msg'])
