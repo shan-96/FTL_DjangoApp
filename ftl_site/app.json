@@ -1,0 +1,22 @@
+{
+  "name": "FTL Django App",
+  "description": "A simple POC Django app",
+  "image": "heroku/python",
+  "repository": "https://github.com/shan-96/FTL_DjangoApp",
+  "keywords": ["python", "django" ],
+  "addons": [ "heroku-postgresql" ],
+  "env": {
+    "SECRET_KEY": {
+      "description": "The secret key for the Django application.",
+      "generator": "secret"
+    }
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "test-setup": "python manage.py collectstatic --noinput",
+        "test": "python manage.py test"
+      }
+    }
+  }
+}
