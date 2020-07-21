@@ -57,6 +57,26 @@ def results(request):
     }
     return HttpResponse(template.render(context, request))
 
+# SAMPLE TO PUMP JSON DATA. DISABLED AFTER USAGE.
+# TO USE AGAIN, ADD TO APP URL AND CONFIGURE STATIC ROOT
+# ensure json file is present in static repo
+# def pump(request):
+#     file = staticfiles_storage.path('path/to/file.json')
+#     with open(file) as f:
+#         data = json.load(f)
+#         for d in data['members']:
+#             m = FTL_User
+#             m.user_id = str(d['user_id'])
+#             m.real_name = float(d['real_name'])
+#             m.tz = str(d['tz'])
+#             try:
+#                 m.save()
+#                 for g in d['activity_periods']:
+#                     gm = FTL_User_Activity(user_id=m, start_time=g['start_time'], end_time=g['end_time'])
+#                     gm.save()
+#             except (IntegrityError, ValueError):
+#                 print("Data Integrity broken. Will not push to DB")
+#     return HttpResponse("Success")
 
 class JsonOutput:
     ok = True
